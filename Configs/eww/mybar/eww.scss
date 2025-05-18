@@ -27,7 +27,7 @@
 // Workspaces
 .workspaces {
     margin-left: 10px;
-    margin-top: -4px;
+    margin-top: -10px;
 }
 .workspace_buttons {
     font-family: Hack;
@@ -174,7 +174,7 @@
     all: unset;
     background-color: rgba($color15, 0.4);
     min-width: 173px;
-    min-height: 10px;
+    min-height: 5px;
     border-radius: 10px;
 }
 .bar_highlighted {
@@ -190,7 +190,7 @@
     all: unset;
     background-color: rgba($color15, 0.4);
     min-width: 173px;
-    min-height: 10px;
+    min-height: 5px;
     border-radius: 10px;
 }
 

@@ -88,13 +88,13 @@
     (geometry 
       :anchor "top left"
       :x "20px"
-      :y "00px"
+      :y "20px"
       :width "455px"
       :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -106,13 +106,13 @@
     (geometry 
       :anchor "top center"
       :x "0px"
-      :y "0px"
+      :y "20px"
       :width "930px"
       :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -124,13 +124,13 @@
     (geometry 
       :anchor "top right"
       :x "-20px"
-      :y "0px"
+      :y "20px"
       :width "455px"
       :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -290,7 +290,7 @@
       :valign "fill"
       :hexpand "false"
       (workspaces)
-;;      (layout)
+      (layout)
       (music))))
 
 

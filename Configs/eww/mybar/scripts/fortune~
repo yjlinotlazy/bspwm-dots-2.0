@@ -1,0 +1,32 @@
+#!/bin/sh
+
+scroll_text () {
+	scroll_index=0
+	text=$1
+	text_len=$2
+	eww_var=$3
+	$eww update $eww_var="$text"
+	while true; do
+		text_parsed=`$HOME/.config/eww/mybar/scripts/parse_jp "$text" "$scroll_index"`
+		scroll_index=$(( (scroll_index + 1) % (text_len + 8) )) 
+		$eww update $eww_var\_parsed="$text_parsed"
+		$eww update $eww_var="$text_parsed"
+		# Change the value below to control how fast text should scroll
+		sleep 0.3
+	done
+}
+
+fortune=`daily_fortune random`
+eww="eww -c $HOME/.config/eww/mybar"
+
+while true; do
+    #fortune_len=${#fortune}
+    #if [[ $fortune_len -gt 20 ]] 
+    #then
+    #    scroll_text "$fortune" "$fortune_len" "fortune" &
+    #else
+    #fortune_parsed=`$HOME/.config/eww/mybar/scripts/parse_jp "$fortune" "0"`
+    $eww update fortune="$fortune"
+    #$eww update fortune="$fortune_parsed"
+    #fi;
+done;

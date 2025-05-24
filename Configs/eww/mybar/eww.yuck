@@ -34,7 +34,7 @@
 (defvar disk_reveal false)
 (defvar temperature_reveal false)
 (defvar ram_reveal false)
-(defvar date_reveal false)
+(defvar date_reveal true)
 (defvar battery_reveal false)
 (defvar media_bar_class "bar_normal")
 (defvar media_bar_is_active false)
@@ -53,7 +53,8 @@
 (defvar media_status "")
 (defvar artist "No artist")
 (defvar artist_parsed "No artist") 
-(defvar title "No title") 
+(defvar title "No title")
+(defvar fortune "")
 (defvar title_parsed "No title") 
 (defvar length 100)
 (defvar position 0) 
@@ -65,6 +66,7 @@
 (deflisten launch2 "scripts/layout")
 (deflisten launch3 "scripts/media_info")
 (deflisten launch4 "scripts/cpu_info")
+(deflisten launch5 "scripts/fortune")
 
 ;;(defpoll cpu_percent :interval "1s" "scripts/cpu_info")
 (defpoll disk_all :interval "1s" "scripts/disk_info --all")
@@ -87,9 +89,9 @@
   :geometry 
     (geometry 
       :anchor "top left"
-      :x "20px"
+      :x "60px"
       :y "00px"
-      :width "455px"
+      :width "415px"
       :height "50px")
   :stacking "bg"
   :reserve 
@@ -303,47 +305,28 @@
         :orientation "h"
         :spacing 5
         :space-evenly "false"
-        :class "${launch1}, ${launch2}, ${launch3}, ${launch4}"
-        (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 1"
-            :onclick "bspc desktop -f 0"
-            (label
-              :markup wp0 
-              :class "workspace_buttons")))
-        (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 2"
-            :onclick "bspc desktop -f 1"
-            (label
-              :markup wp1 
-              :class "workspace_buttons")))
-        (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 3"
-            :onclick "bspc desktop -f 2"
-            (label
-              :markup wp2 
-              :class "workspace_buttons")))
-        (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 4"
-            :onclick "bspc desktop -f 3"
-            (label
-              :markup wp3 
-              :class "workspace_buttons")))
-        (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 5"
-            :onclick "bspc desktop -f 4"
-            (label
-              :markup wp4 
-              :class "workspace_buttons")))
+        :class "${launch1}, ${launch2}, ${launch3}, ${launch4}, ${launch5}"
+         (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "prev_button"
+                    :onclick "scripts/media_control --prev" 
+                    :tooltip "Previous"
+                    ""))
+                (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "toggle_button"
+                    :onclick "scripts/media_control --toggle" 
+                    :tooltip "Play/Pause"
+                    "${media_status}"))
+                (eventbox
+                  :cursor "pointer"
+                  (button 
+                    :class "next_button"
+                    :onclick "scripts/media_control --next" 
+                    :tooltip "Next"
+                    ""))
       )))
 
   (defwidget layout []
@@ -789,7 +772,7 @@
       :hexpand "false"
       (power_button)
       (time)
-      (keyboard)
+      (fortune)
       )))
 
 (defwidget power_button []
@@ -809,8 +792,9 @@
   (eventbox
     :tooltip "Current time"
     :onhover "${eww} update date_reveal=true"
-    :onhoverlost "${eww} update date_reveal=false"
+    :onhoverlost "${eww} update date_reveal=true"
     :cursor "pointer"
+    
     (button 
       :onclick "scripts/popup_calendar"
       (box
@@ -830,36 +814,28 @@
           :valign "fill"
           (label
             :valign "fill"
+	    :width "20px" 
             :class "date"
             :markup "<span font-size=\"xx-small\">${date}</span>"
             ))))))
 
-(defwidget keyboard [] 
+(defwidget fortune [] 
   (box 
-    :class "kb_box"
     :orientation "h"
     :valign "fill"
     :halign "center"
     "|"
     (box
       :orientation "v"
-      :space-evenly "false"
-      :valign "center"
+      :valign "fill"
       :halign "center"
-      (eventbox 
-        :cursor "pointer"
-        :tooltip "Change layout to US english"
-        (button
-          :class "${us_class}"
-          :onclick "scripts/kb_layouts set us"
-          :valign "center"
-          "US"))
-      (eventbox
-        :cursor "pointer"
-        :tooltip "Change layout to US spanish"
-        (button
-          :class "${es_class}"
-          :onclick "scripts/kb_layouts set es"
-          :valign "center"
-          "ES")
-          ))))
+      (label
+                :class "fortune"
+                :halign "center"
+                :markup fortune
+                ;;:limit-width 15
+                :wrap "true"
+                :show_truncated "true")
+          )
+	  )
+	  )

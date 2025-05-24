@@ -12,14 +12,14 @@
 .win_normal {
     background-image: url("images/background.png");
     background-color: $color0;
-    border: 5px solid $color9;
+    border: 2px solid $color9;
     border-radius: 40px;
 }
 
 .win_hovered {
     background-image: url("images/background.png");
     background-color: $color8;
-    border: 5px solid $color9;
+    border: 2px solid $color9;
     border-radius: 40px;
 }
 
@@ -104,7 +104,7 @@
 
 .prev_button, .toggle_button, .next_button {
     font-size: 20px;
-    min-width: 30px;
+    min-width: 20px;
     margin-top: 2px;
     margin-bottom: -3px;
 //    background-color: #ffffff;
@@ -112,8 +112,8 @@
 
 .playpause_popup {
     font-size: 30px;
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
     color: $color12;
 }
 .move_popup {
@@ -275,4 +275,15 @@
     border: 5px solid $color9;
     border-radius: 0 0 20 20;
     padding: 10px;
+}
+
+
+.fortune {
+    //font-family: "Meiryo";
+    font-size: 16px;
+    color: $color15;
+    margin-bottom: -1px;
+    margin-right: -5161px;
+    margin-left: -5000px;
+    margin-top: 2px;
 }

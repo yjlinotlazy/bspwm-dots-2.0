@@ -34,7 +34,7 @@
 (defvar disk_reveal false)
 (defvar temperature_reveal false)
 (defvar ram_reveal false)
-(defvar date_reveal true)
+(defvar date_reveal false)
 (defvar battery_reveal false)
 (defvar media_bar_class "bar_normal")
 (defvar media_bar_is_active false)
@@ -53,8 +53,7 @@
 (defvar media_status "")
 (defvar artist "No artist")
 (defvar artist_parsed "No artist") 
-(defvar title "No title")
-(defvar fortune "")
+(defvar title "No title") 
 (defvar title_parsed "No title") 
 (defvar length 100)
 (defvar position 0) 
@@ -66,7 +65,6 @@
 (deflisten launch2 "scripts/layout")
 (deflisten launch3 "scripts/media_info")
 (deflisten launch4 "scripts/cpu_info")
-(deflisten launch5 "scripts/fortune")
 
 ;;(defpoll cpu_percent :interval "1s" "scripts/cpu_info")
 (defpoll disk_all :interval "1s" "scripts/disk_info --all")
@@ -89,14 +87,14 @@
   :geometry 
     (geometry 
       :anchor "top left"
-      :x "40px"
-      :y "00px"
-      :width "415px"
+      :x "20px"
+      :y "20px"
+      :width "455px"
       :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -107,14 +105,14 @@
   :geometry 
     (geometry 
       :anchor "top center"
-      :x "-20px"
-      :y "0px"
-      :width "750px"
-      :height "40px")
+      :x "0px"
+      :y "20px"
+      :width "930px"
+      :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -126,13 +124,13 @@
     (geometry 
       :anchor "top right"
       :x "-20px"
-      :y "0px"
-      :width "555px"
+      :y "20px"
+      :width "455px"
       :height "50px")
   :stacking "bg"
   :reserve 
     (struts 
-      :distance "50px" 
+      :distance "70px" 
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
@@ -168,7 +166,7 @@
     (geometry
       :x "40px"
       :y "65px"
-      :width "405px"
+      :width "415px"
       :height "200px")
     :stacking "fg"
     :windowtype "dock"
@@ -292,7 +290,7 @@
       :valign "fill"
       :hexpand "false"
       (workspaces)
-;;      (layout)
+      (layout)
       (music))))
 
 
@@ -305,60 +303,47 @@
         :orientation "h"
         :spacing 5
         :space-evenly "false"
-        :class "${launch1}, ${launch2}, ${launch3}, ${launch4}, ${launch5}"
-	(eventbox
+        :class "${launch1}, ${launch2}, ${launch3}, ${launch4}"
+        (eventbox
           :cursor "pointer"
           (button 
             :tooltip "Switch to workspace 1"
-            :onclick "wmctrl -s 0"
+            :onclick "bspc desktop -f 0"
             (label
               :markup wp0 
               :class "workspace_buttons")))
-	  (eventbox
+        (eventbox
           :cursor "pointer"
           (button 
             :tooltip "Switch to workspace 2"
-            :onclick "wmctrl -s 1"
+            :onclick "bspc desktop -f 1"
             (label
               :markup wp1 
               :class "workspace_buttons")))
-	   (eventbox
+        (eventbox
           :cursor "pointer"
           (button 
             :tooltip "Switch to workspace 3"
-            :onclick "wmctrl -s 2"
+            :onclick "bspc desktop -f 2"
             (label
               :markup wp2 
               :class "workspace_buttons")))
-	  (eventbox
+        (eventbox
           :cursor "pointer"
           (button 
             :tooltip "Switch to workspace 4"
-            :onclick "wmctrl -s 3"
+            :onclick "bspc desktop -f 3"
             (label
               :markup wp3 
               :class "workspace_buttons")))
-         (eventbox 
-                  :cursor "pointer"
-                  (button 
-                    :class "prev_button"
-                    :onclick "scripts/media_control --prev" 
-                    :tooltip "Previous"
-                    ""))
-                (eventbox 
-                  :cursor "pointer"
-                  (button 
-                    :class "toggle_button"
-                    :onclick "scripts/media_control --toggle" 
-                    :tooltip "Play/Pause"
-                    "${media_status}"))
-                (eventbox
-                  :cursor "pointer"
-                  (button 
-                    :class "next_button"
-                    :onclick "scripts/media_control --next" 
-                    :tooltip "Next"
-                    ""))
+        (eventbox
+          :cursor "pointer"
+          (button 
+            :tooltip "Switch to workspace 5"
+            :onclick "bspc desktop -f 4"
+            (label
+              :markup wp4 
+              :class "workspace_buttons")))
       )))
 
   (defwidget layout []
@@ -804,7 +789,7 @@
       :hexpand "false"
       (power_button)
       (time)
-      (fortune)
+      (keyboard)
       )))
 
 (defwidget power_button []
@@ -824,9 +809,8 @@
   (eventbox
     :tooltip "Current time"
     :onhover "${eww} update date_reveal=true"
-    :onhoverlost "${eww} update date_reveal=true"
+    :onhoverlost "${eww} update date_reveal=false"
     :cursor "pointer"
-    
     (button 
       :onclick "scripts/popup_calendar"
       (box
@@ -846,28 +830,36 @@
           :valign "fill"
           (label
             :valign "fill"
-	    :width "20px" 
             :class "date"
             :markup "<span font-size=\"xx-small\">${date}</span>"
             ))))))
 
-(defwidget fortune [] 
+(defwidget keyboard [] 
   (box 
+    :class "kb_box"
     :orientation "h"
     :valign "fill"
     :halign "center"
-    "| "
+    "|"
     (box
       :orientation "v"
-      :valign "fill"
+      :space-evenly "false"
+      :valign "center"
       :halign "center"
-      (label
-                :class "fortune"
-                :halign "left"
-                :markup fortune
-                :limit-width 20
-                :wrap "true"
-                :show_truncated "true")
-          )
-	  )
-	  )
+      (eventbox 
+        :cursor "pointer"
+        :tooltip "Change layout to US english"
+        (button
+          :class "${us_class}"
+          :onclick "scripts/kb_layouts set us"
+          :valign "center"
+          "US"))
+      (eventbox
+        :cursor "pointer"
+        :tooltip "Change layout to US spanish"
+        (button
+          :class "${es_class}"
+          :onclick "scripts/kb_layouts set es"
+          :valign "center"
+          "ES")
+          ))))

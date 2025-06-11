@@ -16,10 +16,10 @@ scroll_text () {
 	done
 }
 
-fortune=`/home/yli/miniconda3/bin/daily_fortune random`
+fortune=`daily_fortune random`
 eww="eww -c $HOME/.config/eww/mybar"
 
-#while true; do
+while true; do
     #fortune_len=${#fortune}
     #if [[ $fortune_len -gt 20 ]] 
     #then
@@ -29,4 +29,4 @@ eww="eww -c $HOME/.config/eww/mybar"
     $eww update fortune="$fortune"
     #$eww update fortune="$fortune_parsed"
     #fi;
-#done;
+done;

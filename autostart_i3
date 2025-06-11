@@ -1,0 +1,55 @@
+#!/bin/sh
+
+kill_and_wait () {
+    if [[ `pgrep -c "$1"` -gt 0 ]]
+    then
+        killall "$1"
+        while [[ `pgrep -c "$1"` -gt 0 ]];
+        do
+            sleep 0.1
+        done;
+    fi;
+}
+
+# Source colorscheme
+source "${HOME}/.cache/wal/colors.sh"
+
+# Statusbar
+kill_and_wait workspaces    
+kill_and_wait media_info    
+kill_and_wait layout  
+eww -c ~/.config/eww_i3/mybar kill 
+eww -c ~/.config/eww_i3/mybar daemon    
+~/.config/eww_i3/mybar/scripts/ewwcolorscheme  
+eww -c ~/.config/eww_i3/mybar open bar_right
+eww -c ~/.config/eww_i3/mybar open bar_center
+eww -c ~/.config/eww_i3/mybar open bar_left
+kill_and_wait polybar
+# xdotool search --sync --onlyvisible --name "Eww - bar_right"
+polybar -c ~/.config/eww_i3/mybar/polybar_tray.ini tray& > /dev/null
+
+#Applets
+#kill_and_wait blueman-applet
+#kill_and_wait pa-applet
+#kill_and_wait nm-applet
+#kill_and_wait flameshot
+#blueman-applet&
+#pa-applet --disable-key-grabbing --disable-notifications&
+#nm-applet&
+#flameshot&
+    
+# daemons
+kill_and_wait dunst
+dunst > /dev/null 2> /dev/null &
+thunar --daemon&
+kill_and_wait sxhkd
+sxhkd -c ~/.config/bspwm/sxhkdrc > /dev/null 2> /dev/null&
+
+# Window event monitoring
+kill_and_wait winevents.sh
+~/.bscripts/winevents.sh&
+
+# Autosuspend
+kill_and_wait idle.sh
+~/.bscripts/idle.sh > /dev/null 2> /dev/null&
+

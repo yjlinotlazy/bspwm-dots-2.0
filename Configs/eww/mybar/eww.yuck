@@ -87,11 +87,12 @@
 ;; Left bar
 (defwindow bar_left
   :monitor 0
+  :exclusive true
   :geometry 
     (geometry 
       :anchor "top left"
       :x "40px"
-      :y "00px"
+      :y "-45px"
       :width "415px"
       :height "40px")
   :stacking "bg"
@@ -106,12 +107,13 @@
 ;; Central bar 
 (defwindow bar_center
   :monitor 0
+  :exclusive true
   :geometry 
     (geometry 
       :anchor "top center"
-      :x "-40px"
+      :x "0px"
       :y "0px"
-      :width "750px"
+      :width "740px"
       :height "40px")
   :stacking "bg"
   :reserve 
@@ -129,7 +131,7 @@
     (geometry 
       :anchor "top right"
       :x "-10px"
-      :y "0px"
+      :y "-45px"
       :width "590px"
       :height "45px")
   :stacking "bg"

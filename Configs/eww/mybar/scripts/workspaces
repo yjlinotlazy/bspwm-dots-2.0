@@ -2,20 +2,26 @@
 
 total=`wmctrl -d | wc -l`    
 icon1=○
-icon2=◎
+icon2=◑
 icon3=●
 eww="eww -c $HOME/.config/eww/mybar/"
 
 while true; do
-	currwp=$((`wmctrl -d | grep '*' | cut -c1`))
-	for (( i = 0; i < $total; i++));    
-	do    
-	    if [[ $i -eq $currwp ]]    
-	    then    
-	        $eww update wp$i=$icon3    
-	    else    
-	        $eww update wp$i=$icon1     
-	    fi;    
-	done
-	echo cycle
+    currwp=$((`wmctrl -d | grep '*' | cut -c1`))	
+    for (( i = 0; i < $total; i++));    
+    do
+	has_stuff=$((`wmctrl -l | grep " $i " | wc -l`))
+	#echo $i
+	#echo $has_stuff
+	if [[ $i -eq $currwp ]];
+	then    
+	    $eww update wp$i=$icon3
+	elif [[ $has_stuff -gt 0 ]];
+	then
+	    $eww update wp$i=$icon2
+	else
+	    $eww update wp$i=$icon1     
+	fi;    
+    done
+    echo cycle
 done

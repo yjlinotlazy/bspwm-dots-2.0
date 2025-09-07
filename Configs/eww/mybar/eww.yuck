@@ -86,13 +86,14 @@
 ;; WINDOWS
 ;; Left bar
 (defwindow bar_left
+  :monitor 0
   :geometry 
     (geometry 
       :anchor "top left"
       :x "40px"
       :y "00px"
       :width "415px"
-      :height "50px")
+      :height "40px")
   :stacking "bg"
   :reserve 
     (struts 
@@ -104,10 +105,11 @@
 
 ;; Central bar 
 (defwindow bar_center
+  :monitor 0
   :geometry 
     (geometry 
       :anchor "top center"
-      :x "-20px"
+      :x "-40px"
       :y "0px"
       :width "750px"
       :height "40px")
@@ -122,13 +124,14 @@
 
 ;; Right bar
 (defwindow bar_right
+  :monitor 0
   :geometry 
     (geometry 
       :anchor "top right"
-      :x "-20px"
+      :x "-10px"
       :y "0px"
-      :width "555px"
-      :height "50px")
+      :width "590px"
+      :height "45px")
   :stacking "bg"
   :reserve 
     (struts 
@@ -136,15 +139,17 @@
       :side "top")
   :windowtype "dock"
   :wm-ignore "false"
-(widgets_right))
+  (widgets_right)
+)
 
 ;; Calendar window
 (defwindow calendar
+  :monitor 0
   :geometry 
     (geometry 
       :x "1465px" 
       :y "65px"
-      :width "415px"
+      :width "445px"
       :height "100px")
   :stacking "fg"
   :windowtype "dock"
@@ -164,6 +169,7 @@
 
 ;; Music window
 (defwindow music
+  :monitor 0
   :geometry
     (geometry
       :x "40px"
@@ -833,10 +839,13 @@
         :class "time_box"
         :space-evenly "false"
         :orientation "h"
-        :valign "center"
-        :halign "fill"
+        :valign "left"
+        :halign "left"
+	:hexpand "false"
         (label 
           :valign "center"
+	  :hexpand "false"
+	  :halign "left"
           :class "time"
           :markup "<span font-weight=\"heavy\">${hour}</span><span font-weight=\"heavy\">:${minutes}</span><span font-size=\"xx-small\">${type}</span>" )
         (revealer
@@ -855,19 +864,25 @@
   (box 
     :orientation "h"
     :valign "fill"
-    :halign "center"
-    "| "
+    :space-evenly "false"
+    :halign "right"
+    :hexpand "false"
+    "|         "
     (box
       :orientation "v"
       :valign "fill"
-      :halign "center"
+      :halign "right"
+      ;;:space-evenly "false"
+      :spacing -20
       (label
                 :class "fortune"
-                :halign "left"
+                :halign "right"
                 :markup fortune
-                :limit-width 20
-                :wrap "true"
-                :show_truncated "true")
+		:hexpand "false"
+                ;;:limit-width 40
+                ;;:wrap "true"
+                ;;:show_truncated "true"
+		)
           )
 	  )
 	  )

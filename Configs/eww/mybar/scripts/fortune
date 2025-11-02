@@ -8,16 +8,29 @@ scroll_text () {
 	$eww update $eww_var="$text"
 	while true; do
 		text_parsed=`$HOME/.config/eww/mybar/scripts/parse_jp "$text" "$scroll_index"`
-		scroll_index=$(( (scroll_index + 1) % (text_len + 8) )) 
-		$eww update $eww_var\_parsed="$text_parsed"
-		$eww update $eww_var="$text_parsed"
+		scroll_index=$(( (scroll_index + 1) % (text_len + 18) )) 
+		$eww update $eww_var\_parsed="             $text_parsed"
+		$eww update $eww_var="            $text_parsed"
 		# Change the value below to control how fast text should scroll
 		sleep 0.3
 	done
 }
 
-fortune=`/home/yli/miniconda3/bin/daily_fortune random`
+fortune="                                 `/home/yli/miniconda3/bin/daily_fortune random`"
 eww="eww -c $HOME/.config/eww/mybar"
+
+#while true; do
+    #fortune="                               `/home/yli/miniconda3/bin/daily_fortune random`"
+    #eww="eww -c $HOME/.config/eww/mybar"
+    #sleep 10
+#done;
+
+while true; do
+    n_fortune=`/home/yli/miniconda3/bin/daily_fortune random`
+    #n_fortune="1"
+    $eww update fortune="                       $n_fortune"
+    sleep 300
+done
 
 #while true; do
     #fortune_len=${#fortune}

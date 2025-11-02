@@ -54,7 +54,7 @@
 (defvar artist "No artist")
 (defvar artist_parsed "No artist") 
 (defvar title "No title")
-(defvar fortune "Loading...")
+(defvar fortune "")
 (defvar title_parsed "No title") 
 (defvar length 100)
 (defvar position 0) 
@@ -90,12 +90,12 @@
   :exclusive true
   :geometry 
     (geometry 
-      :anchor "top center"
-      :x "10px"
-      :y "0px"
-      :width "90%"
+      :anchor "top left"
+      :x "40px"
+      :y "-45px"
+      :width "415px"
       :height "40px")
-  :stacking "fg"
+  :stacking "bg"
   :reserve 
     (struts 
       :distance "50px" 
@@ -103,6 +103,46 @@
   :windowtype "dock"
   :wm-ignore "false"
 (widgets_left))
+
+;; Central bar 
+(defwindow bar_center
+  :monitor 0
+  :exclusive true
+  :geometry 
+    (geometry 
+      :anchor "top center"
+      :x "0px"
+      :y "0px"
+      :width "740px"
+      :height "40px")
+  :stacking "bg"
+  :reserve 
+    (struts 
+      :distance "50px" 
+      :side "top")
+  :windowtype "dock"
+  :wm-ignore "false"
+  (widgets_center))
+
+;; Right bar
+(defwindow bar_right
+  :monitor 0
+  :geometry 
+    (geometry 
+      :anchor "top right"
+      :x "-10px"
+      :y "-45px"
+      :width "590px"
+      :height "45px")
+  :stacking "bg"
+  :reserve 
+    (struts 
+      :distance "50px" 
+      :side "top")
+  :windowtype "dock"
+  :wm-ignore "false"
+  (widgets_right)
+)
 
 ;; Calendar window
 (defwindow calendar
@@ -190,10 +230,44 @@
             (eventbox
               :cursor "pointer"
               (button
+                :onclick "scripts/media_control --prev"
+                :class "nextprev_popup"
+                :tooltip "Previous"
+                ""))
+            (eventbox
+              :cursor "pointer"
+              (button
+                :onclick "scripts/media_control --move -5"
+                :class "move_popup"
+                :tooltip "-5 seconds"
+                ""))
+            (eventbox
+              :cursor "pointer"
+              (button
+                :onclick "scripts/media_control --toggle"
+                :class "playpause_popup"
+                :tooltip "Play/Pause"
                 media_status))
+            (eventbox
+              :cursor "pointer"
+              (button
+                :onclick "scripts/media_control --move +5"
+                :class "move_popup"
+                :tooltip "+5 seconds"
+                ""))
+            (eventbox
+              :cursor "pointer"
+              (button
+                :onclick "scripts/media_control --next"
+                :class "nextprev_popup"
+                :tooltip "Next"
+                ""))
+      
                 )))
       (eventbox
         :cursor "pointer"
+        :onhover "${eww} update media_bar_class_popup=\"bar_highlighted_popup\" && ${eww} update media_bar_is_active_popup=true"
+        :onhoverlost "${eww} update media_bar_class_popup=\"bar_normal_popup\" && ${eww} update media_bar_is_active_popup=false"
         (box
           :active media_bar_is_active_popup
           :orientation "h"
@@ -225,17 +299,9 @@
       :orientation "h"
       :valign "fill"
       :hexpand "false"
-(time)
       (workspaces)
 ;;      (layout)
-      (music)
-(cpu_status)
-        (ram_status)
-        (temperature_status)
-        (disk_status)
-        (battery_status)
-(fortune)
-)))
+      (music))))
 
 
   (defwidget workspaces []
@@ -272,7 +338,7 @@
             (label
               :markup wp2 
               :class "workspace_buttons")))
-	   (eventbox
+	  (eventbox
           :cursor "pointer"
           (button 
             :tooltip "Switch to workspace 4"
@@ -280,14 +346,27 @@
             (label
               :markup wp3 
               :class "workspace_buttons")))
-	  (eventbox
-          :cursor "pointer"
-          (button 
-            :tooltip "Switch to workspace 5"
-            :onclick "wmctrl -s 4"
-            (label
-              :markup wp4 
-              :class "workspace_buttons")))
+         (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "prev_button"
+                    :onclick "scripts/media_control --prev" 
+                    :tooltip "Previous"
+                    ""))
+                (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "toggle_button"
+                    :onclick "scripts/media_control --toggle" 
+                    :tooltip "Play/Pause"
+                    "${media_status}"))
+                (eventbox
+                  :cursor "pointer"
+                  (button 
+                    :class "next_button"
+                    :onclick "scripts/media_control --next" 
+                    :tooltip "Next"
+                    ""))
       )))
 
   (defwidget layout []
@@ -309,6 +388,8 @@
 
   (defwidget music []     
     (eventbox 
+      :onhover "${eww} update music_reveal=true"
+      :onhoverlost "${eww} update music_reveal=false"
       (box 
         :class "music_box"
         :orientation "h" 
@@ -321,7 +402,13 @@
             :space_evenly "false"
             :halign "start"
             :tooltip "${title} by ${artist}"
-))
+            (button
+              :onclick "scripts/popup_music"
+              (image
+                :class "media_art"
+                :path cover
+                :image-height 40
+                :image-width 40))))
         (box
           :class "media_data"
           :orientation "v"
@@ -351,9 +438,37 @@
                 :markup title_parsed
                 :limit-width 15
                 :wrap "true"
-                :show_truncated "true")
-))
-)
+                :show_truncated "true")))
+            (revealer
+              :reveal music_reveal
+              :transition "slideup"
+              :duration "350ms"
+              (box 
+                :orientation "h"
+                :halign "center"
+                :class "media_buttons"
+                :space-evenly false
+                (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "prev_button"
+                    :onclick "scripts/media_control --prev" 
+                    :tooltip "Previous"
+                    ""))
+                (eventbox 
+                  :cursor "pointer"
+                  (button 
+                    :class "toggle_button"
+                    :onclick "scripts/media_control --toggle" 
+                    :tooltip "Play/Pause"
+                    "${media_status}"))
+                (eventbox
+                  :cursor "pointer"
+                  (button 
+                    :class "next_button"
+                    :onclick "scripts/media_control --next" 
+                    :tooltip "Next"
+                    "")))))
           (box 
             :space-evenly "false"
             :class media_bar_class
@@ -362,6 +477,8 @@
             :hexpand "false"
             (eventbox
               :cursor "pointer"
+              :onhover "${eww} update media_bar_class=bar_highlighted && ${eww} update media_bar_is_active=true"
+              :onhoverlost "${eww} update media_bar_class=bar_normal && ${eww} update media_bar_is_active=false"
               (scale
                 :active media_bar_is_active
                 :min 0
@@ -369,8 +486,8 @@
                 :value position
                 :orientation "h"
                 :tooltip "Seek"
-                )
-))))))
+                :onchange "scripts/media_control --seek {} ${media_bar_is_active}"
+                )))))))
         
 ;; Central widgets
 (defwidget widgets_center []
@@ -489,7 +606,7 @@
               :valign "start"
               (label
                 :class "center_labels"
-                :text "${disk_used}G/${disk_all}G"
+                :text "${disk_used}Gb/${disk_all}Gb"
                 :halign "center")
               (scale
                 :min 0
@@ -678,6 +795,39 @@
                 :text battery_time)) 
             )))))
 
+
+
+
+;; Right widgets
+(defwidget widgets_right []
+  (eventbox
+    :onhover "${eww} update right_class=\"win_hovered\""
+    :onhoverlost "${eww} update right_class=\"win_normal\""
+    (box 
+      :spacing 0
+      :space-evenly "false"
+      :class right_class
+      :orientation "h"
+      :valign "fill"
+      :hexpand "false"
+      (power_button)
+      (time)
+      (fortune)
+      )))
+
+(defwidget power_button []
+  (eventbox
+    :cursor "pointer"
+    :tooltip "Logout options"
+    :width "20px" 
+    (button
+      :valign "fill"
+      :onclick "~/.bscripts/rofi.sh outopts&"
+      (label
+      	:class "power_button"
+        :text ""
+      ))))
+
 (defwidget time []
   (eventbox
     :tooltip "Current time"
@@ -719,12 +869,13 @@
     :space-evenly "false"
     :halign "right"
     :hexpand "false"
+    "|         "
     (box
       :orientation "v"
       :valign "fill"
       :halign "right"
       ;;:space-evenly "false"
-      ;;:spacing -10
+      :spacing -20
       (label
                 :class "fortune"
                 :halign "right"

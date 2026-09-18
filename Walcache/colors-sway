@@ -1,4 +1,4 @@
-set $wallpaper /home/kz87/.config/wpg/wallpapers/wallpaper.png
+set $wallpaper /home/<username>/.config/wpg/wallpapers/wallpaper.png
 
 set $background #101012
 set $foreground #fffdf8

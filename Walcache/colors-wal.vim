@@ -1,5 +1,5 @@
 " Special
-let wallpaper  = "/home/kz87/.config/wpg/wallpapers/wallpaper.png"
+let wallpaper  = "/home/<username>/.config/wpg/wallpapers/wallpaper.png"
 let background = "#101012"
 let foreground = "#fffdf8"
 let cursor     = "#fffdf8"

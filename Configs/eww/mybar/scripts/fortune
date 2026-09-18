@@ -16,17 +16,17 @@ scroll_text () {
 	done
 }
 
-fortune="                                 `/home/yli/miniconda3/bin/daily_fortune random`"
+fortune="                                 `/home/<username>/miniconda3/bin/daily_fortune random`"
 eww="eww -c $HOME/.config/eww/mybar"
 
 #while true; do
-    #fortune="                               `/home/yli/miniconda3/bin/daily_fortune random`"
+    #fortune="                               `/home/<username>/miniconda3/bin/daily_fortune random`"
     #eww="eww -c $HOME/.config/eww/mybar"
     #sleep 10
 #done;
 
 while true; do
-    n_fortune=`/home/yli/miniconda3/bin/daily_fortune random`
+    n_fortune=`/home/<username>/miniconda3/bin/daily_fortune random`
     #n_fortune="1"
     $eww update fortune="                       $n_fortune"
     sleep 300

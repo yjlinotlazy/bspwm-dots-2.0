@@ -16,7 +16,7 @@ scroll_text () {
 	done
 }
 
-fortune=`/home/yli/miniconda3/bin/daily_fortune random`
+fortune=`/home/<username>/miniconda3/bin/daily_fortune random`
 eww="eww -c $HOME/.config/eww/mybar"
 
 #while true; do

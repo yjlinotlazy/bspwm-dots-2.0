@@ -1,4 +1,4 @@
-wallpaper: "/home/kz87/.config/wpg/wallpapers/wallpaper.png"
+wallpaper: "/home/<username>/.config/wpg/wallpapers/wallpaper.png"
 
 special:
     background: "#101012"
